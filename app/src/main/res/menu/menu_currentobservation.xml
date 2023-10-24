@@ -3,8 +3,8 @@
 
     <item  android:id="@+id/exportObservation"
         android:title="Export Observation"/>
-    <item  android:id="@+id/item2"
-        android:title="Item 2"/>
+    <item  android:id="@+id/deleteObservation"
+        android:title="Delete Observation"/>
     <item  android:id="@+id/item3"
         android:title="Item 3"/>
 

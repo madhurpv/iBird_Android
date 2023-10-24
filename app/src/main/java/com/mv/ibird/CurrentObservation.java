@@ -8,7 +8,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -63,6 +66,9 @@ public class CurrentObservation extends AppCompatActivity implements CurrentObse
     Button createButton;
     Toolbar dropdownToolbarForMenuCurrentObservation;
 
+    SharedPreferences sharedPreferences;
+    Gson gson;
+
 
     int position;
     AllObservationsClass allObservationsClassObj;
@@ -85,8 +91,8 @@ public class CurrentObservation extends AppCompatActivity implements CurrentObse
         position = extras.getInt("Position", -1);
 
 
-        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
-        Gson gson = new Gson();
+        sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+        gson = new Gson();
         String json = sharedPreferences.getString("allObservationsClass", "");
         allObservationsClassObj = gson.fromJson(json, AllObservationsClass.class);
         ArrayList<String> titles = allObservationsClassObj.getObservationsArray();
@@ -312,11 +318,52 @@ public class CurrentObservation extends AppCompatActivity implements CurrentObse
         int id = item.getItemId();
         switch (id){
             case R.id.exportObservation:
-                Toast.makeText(getApplicationContext(),"Export Observation Selected",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"Export Observation Selected",Toast.LENGTH_LONG).show();
                 export_observation();
                 return true;
-            case R.id.item2:
-                Toast.makeText(getApplicationContext(),"Item 2 Selected",Toast.LENGTH_LONG).show();
+            case R.id.deleteObservation:
+                //Toast.makeText(getApplicationContext(),"Item 2 Selected",Toast.LENGTH_LONG).show();
+
+                // Create a new dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(CurrentObservation.this);
+
+                // Set the title and the message of the dialog
+                builder.setTitle("Delete");
+                builder.setMessage("Do you really want to delete the observation?");
+
+
+                // Create a positive button for starting the observation
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        allObservationsClassObj.currentObservationClasses.remove(position);
+                        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+                        String allObservationsClassJson = gson.toJson(allObservationsClassObj);
+                        myEdit.putString("allObservationsClass", allObservationsClassJson);
+                        myEdit.apply();
+
+                        // Dismiss the dialog
+                        dialog.dismiss();
+
+                        finish();
+                        Toast.makeText(CurrentObservation.this, "Observation Deleted!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                // Create a negative button for canceling the dialog
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Cancel the dialog
+                        dialog.cancel();
+                    }
+                });
+
+                // Create and show the dialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
                 return true;
             case R.id.item3:
                 Toast.makeText(getApplicationContext(),"Item 3 Selected",Toast.LENGTH_LONG).show();
