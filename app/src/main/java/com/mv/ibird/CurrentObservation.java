@@ -346,6 +346,15 @@ public class CurrentObservation extends AppCompatActivity implements CurrentObse
                         // Dismiss the dialog
                         dialog.dismiss();
 
+                        HomeActivity.titles.clear();
+                        HomeActivity.titles.addAll(allObservationsClassObj.getObservationsArray());
+                        //HomeActivity.titles = allObservationsClassObj.getObservationsArray();
+                        HomeActivity.times.clear();
+                        HomeActivity.times.addAll(allObservationsClassObj.getObservationsTimesArray());
+                        //HomeActivity.times = allObservationsClassObj.getObservationsTimesArray();
+                        HomeActivity.adapter.notifyDataSetChanged();
+
+
                         finish();
                         Toast.makeText(CurrentObservation.this, "Observation Deleted!", Toast.LENGTH_SHORT).show();
                     }

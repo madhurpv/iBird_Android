@@ -21,8 +21,11 @@ import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity implements HomeRecyclerAdapter.ItemClickListener {
 
-    HomeRecyclerAdapter adapter;
+    public static HomeRecyclerAdapter adapter; // Updated from CurrentObservation.java also
     FloatingActionButton addNewObservation;
+
+    public static ArrayList<String> titles;    // Updated from CurrentObservation.java also
+    public static ArrayList<Long> times;       // Updated from CurrentObservation.java also
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +36,8 @@ public class HomeActivity extends AppCompatActivity implements HomeRecyclerAdapt
         Gson gson = new Gson();
         String json = sharedPreferences.getString("allObservationsClass", "");
         AllObservationsClass allObservationsClassObj = gson.fromJson(json, AllObservationsClass.class);
-        ArrayList<String> titles = allObservationsClassObj.getObservationsArray();
-        ArrayList<Long> times = allObservationsClassObj.getObservationsTimesArray();
+        titles = allObservationsClassObj.getObservationsArray();
+        times = allObservationsClassObj.getObservationsTimesArray();
 
 
         // set up the RecyclerView
